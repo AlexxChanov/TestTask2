@@ -1,5 +1,6 @@
 package com.example.currency.data
 
+import android.util.Log
 import com.example.testtask.orderDetail.view.ProductApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -11,7 +12,7 @@ import kotlin.coroutines.CoroutineContext
 class ProductRepository : CoroutineScope {
     override val coroutineContext: CoroutineContext = Dispatchers.IO
 
-    private val currencyApi = Retrofit.Builder()
+    private val productApi = Retrofit.Builder()
         .baseUrl("https://rstestapi.redsoftdigital.com/")
         .addConverterFactory(GsonConverterFactory.create())
         .build()
@@ -20,10 +21,24 @@ class ProductRepository : CoroutineScope {
 
 
     fun getOrder() = async {
-        currencyApi.getProducts()
+        productApi.getProducts()
             .execute()
             .body()
             ?.products
+    }
+
+    fun getOrderByTitle(title: String) = async {
+        productApi.getProductByTitle(title)
+            .execute()
+            .body()
+
+    }
+
+    fun getOrderById(id: Int) = async {
+        productApi.getProduct(id)
+            .execute()
+            .body()
+            ?.product
     }
 
 

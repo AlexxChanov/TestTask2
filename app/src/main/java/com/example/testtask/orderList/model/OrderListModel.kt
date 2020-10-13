@@ -5,25 +5,20 @@ import com.example.currency.data.ProductRepository
 import com.example.testtask.orderDetail.view.Product
 import com.example.testtask.orderDetail.view.Products
 import com.example.testtask.orderList.view.OrderListContract
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
-class OrderListModel:OrderListContract.Model,CoroutineScope {
-    override val coroutineContext: CoroutineContext = Dispatchers.Main
+class OrderListModel:OrderListContract.Model {
     private val repository = ProductRepository()
     private var products: List<Product> = listOf()
 
 
 
-    override fun getProductList(): List<Product> {
-        launch {
+    override fun getProductList() {
+        GlobalScope.launch(Dispatchers.IO){
             products = repository.getOrder().await()!!
-            Log.d("LOG TAG",products.size.toString())
-
         }
-
     }
+
 
 }
